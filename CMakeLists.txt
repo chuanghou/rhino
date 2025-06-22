@@ -5,6 +5,9 @@ project(rhino)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# inc 为项目对外提供的的include文件
+include_directories(inc)
+
 # 包含 FetchContent 模块
 include(FetchContent)
 
