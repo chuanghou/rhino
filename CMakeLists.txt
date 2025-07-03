@@ -1,8 +1,7 @@
-cmake_minimum_required(VERSION 3.17.5)
+cmake_minimum_required(VERSION 3.28.3)
 project(rhino)
 
-# 启用 C++11 或更高标准
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # inc 为项目对外提供的的include文件
@@ -11,11 +10,12 @@ include_directories(inc)
 # 包含 FetchContent 模块
 include(FetchContent)
 
+
 # 拉取测试
 FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://gitee.com/mirrors/googletest.git
-        GIT_TAG        release-1.10.0
+        GIT_TAG        v1.17.0
 )
 
 # 使gtest可用
@@ -28,7 +28,7 @@ enable_testing()
 add_executable(testDemo test/TestDemo.cpp)
 
 # 正确链接 GTest 的目标
-target_link_libraries(testDemo PRIVATE gtest_main gmock_main)
+target_link_libraries(testDemo PRIVATE GTest::gtest GTest::gmock GTest::gtest_main pthread)
 
 # 添加测试
 include(GoogleTest)
