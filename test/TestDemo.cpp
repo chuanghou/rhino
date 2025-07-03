@@ -3,10 +3,16 @@
 //
 
 #include <gtest/gtest.h>
-
-
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+
+#include <boost/filesystem.hpp>
+
+TEST(BoostTest, FileSystemTest) {
+    namespace fs = boost::filesystem;
+    // 1. 测试当前工作目录
+    fs::path current_path = fs::current_path();
+    std::cout << "当前工作目录: " << current_path << std::endl;
+}
 
 // 定义一个接口
 class MyInterface {
@@ -14,7 +20,6 @@ public:
     virtual ~MyInterface() = default;
     virtual int Foo(int x) = 0;
 };
-
 
 // 使用gmock生成Mock类
 class MockMyInterface : public MyInterface {

@@ -7,9 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # inc 为项目对外提供的的include文件
 include_directories(inc)
 
+find_package(Boost REQUIRED COMPONENTS filesystem system)
+find_package(Threads REQUIRED)
+
 # 包含 FetchContent 模块
 include(FetchContent)
-
 
 # 拉取测试
 FetchContent_Declare(
@@ -28,7 +30,14 @@ enable_testing()
 add_executable(testDemo test/TestDemo.cpp)
 
 # 正确链接 GTest 的目标
-target_link_libraries(testDemo PRIVATE GTest::gtest GTest::gmock GTest::gtest_main pthread)
+target_link_libraries(testDemo PRIVATE
+        GTest::gtest
+        GTest::gmock
+        GTest::gtest_main
+        Threads::Threads
+        Boost::boost
+        Boost::filesystem
+        Boost::system)
 
 # 添加测试
 include(GoogleTest)
