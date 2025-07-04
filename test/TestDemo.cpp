@@ -48,7 +48,7 @@ TEST(HelloTest, BasicAssertions) {
 }
 
 
-void writeAddressBook(capnp::byte *mByteBuffer, size_t size) {
+kj::Array<capnp::word> writeAddressBook() {
     ::capnp::MallocMessageBuilder message;
 
     AddressBook::Builder addressBook = message.initRoot<AddressBook>();
@@ -76,16 +76,11 @@ void writeAddressBook(capnp::byte *mByteBuffer, size_t size) {
     bobPhones[1].setType(Person::PhoneNumber::Type::WORK);
     bob.getEmployment().setUnemployed();
 
-    const kj::ArrayPtr<capnp::byte> byteBufferPtr(mByteBuffer, size);
-    kj::ArrayOutputStream outputStream(byteBufferPtr);
-    capnp::writeMessage(outputStream, message);
+    return capnp::messageToFlatArray(message);
 }
 
-void printAddressBook(capnp::byte *mByteBuffer, size_t size) {
-    kj::ArrayPtr<const kj::byte> msgBufPtr(mByteBuffer, size);
-    kj::ArrayInputStream inputStream(msgBufPtr);
-    capnp::InputStreamMessageReader msgReader(inputStream);
-
+void printAddressBook(kj::Array<capnp::word> &words) {
+    capnp::FlatArrayMessageReader msgReader(words);
     AddressBook::Reader addressBook = msgReader.getRoot<AddressBook>();
 
     for (Person::Reader person: addressBook.getPeople()) {
@@ -127,10 +122,8 @@ void printAddressBook(capnp::byte *mByteBuffer, size_t size) {
 // capnp 从github拉分支，cmake -S . -B build  && cmake --build build && cmake --install build
 // 通过这种方式安装可以直接使用cmake findpackage convenience!
 TEST(HelloTest, CapnpTest) {
-    auto *s = new kj::byte[1024];
-    writeAddressBook(s, 1024);
+    auto array = writeAddressBook();
 
-    printAddressBook(s, 1024);
+    printAddressBook(array);
 
-    delete[] s;
 }
