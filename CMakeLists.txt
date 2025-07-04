@@ -5,10 +5,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # inc 为项目对外提供的的include文件
-include_directories(inc)
+include_directories(inc src)
 
-find_package(Boost REQUIRED COMPONENTS filesystem system)
+find_package(Boost REQUIRED filesystem system)
 find_package(Threads REQUIRED)
+find_package(CapnProto REQUIRED)
+
 
 # 包含 FetchContent 模块
 include(FetchContent)
@@ -37,7 +39,9 @@ target_link_libraries(testDemo PRIVATE
         Threads::Threads
         Boost::boost
         Boost::filesystem
-        Boost::system)
+        Boost::system
+        CapnProto::kj
+        CapnProto::capnp)
 
 # 添加测试
 include(GoogleTest)
