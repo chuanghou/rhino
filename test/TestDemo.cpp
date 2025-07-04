@@ -76,9 +76,9 @@ void writeAddressBook(capnp::byte *mByteBuffer, size_t size) {
     bobPhones[1].setType(Person::PhoneNumber::Type::WORK);
     bob.getEmployment().setUnemployed();
 
-    // const kj::ArrayPtr<capnp::byte> byteBufferPtr(mByteBuffer, size);
-    // kj::ArrayOutputStream outputStream(byteBufferPtr);
-    // capnp::writeMessage(outputStream, message);
+    const kj::ArrayPtr<capnp::byte> byteBufferPtr(mByteBuffer, size);
+    kj::ArrayOutputStream outputStream(byteBufferPtr);
+    capnp::writeMessage(outputStream, message);
 }
 
 void printAddressBook(capnp::byte *mByteBuffer, size_t size) {
@@ -127,6 +127,10 @@ void printAddressBook(capnp::byte *mByteBuffer, size_t size) {
 // capnp 从github拉分支，cmake -S . -B build  && cmake --build build && cmake --install build
 // 通过这种方式安装可以直接使用cmake findpackage convenience!
 TEST(HelloTest, CapnpTest) {
-    unsigned char *s = new unsigned char[1024];
+    auto *s = new kj::byte[1024];
     writeAddressBook(s, 1024);
+
+    printAddressBook(s, 1024);
+
+    delete[] s;
 }
