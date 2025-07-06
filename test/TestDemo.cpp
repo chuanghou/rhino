@@ -57,7 +57,7 @@ kj::Array<capnp::word> writeAddressBook() {
     Person::Builder alice = people[0];
     alice.setId(123);
     alice.setName("Alice");
-    alice.setEmail("alice@example.com");
+    alice.setEmail("alice@examp   le.com");
     // Type shown for explanation purposes; normally you'd use auto.
     ::capnp::List<Person::PhoneNumber>::Builder alicePhones =
             alice.initPhones(1);
