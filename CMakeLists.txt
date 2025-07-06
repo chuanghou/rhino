@@ -1,6 +1,9 @@
-cmake_minimum_required(VERSION 3.28.3)
+cmake_minimum_required(VERSION 3.24.0)
 project(rhino)
 
+# 3.24之后机制
+set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/cache/fetch" CACHE PATH "下载缓存目录")
+set(FETCHCONTENT_BINARY_DIR "${FETCHCONTENT_BASE_DIR}/build" CACHE PATH "依赖项构建目录")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -9,8 +12,6 @@ include_directories(inc src)
 
 find_package(Boost REQUIRED filesystem system)
 find_package(Threads REQUIRED)
-find_package(CapnProto REQUIRED)
-
 
 # 包含 FetchContent 模块
 include(FetchContent)
@@ -21,9 +22,16 @@ FetchContent_Declare(
         GIT_REPOSITORY https://gitee.com/mirrors/googletest.git
         GIT_TAG        v1.17.0
 )
-
-# 使gtest可用
 FetchContent_MakeAvailable(googletest)
+
+
+# 拉取测试
+FetchContent_Declare(
+        capnproto
+        GIT_REPOSITORY https://gitee.com/mirrors/capnproto.git
+        GIT_TAG        v1.2.0
+)
+FetchContent_MakeAvailable(capnproto)
 
 # 启用测试
 enable_testing()
