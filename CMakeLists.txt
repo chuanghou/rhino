@@ -51,7 +51,8 @@ FetchContent_MakeAvailable(nlohmann-json)
 enable_testing()
 
 # 添加你的可执行文件
-add_executable(testDemo test/TestDemo.cpp)
+add_executable(testDemo test/TestDemo.cpp
+        src/util/Json.h)
 
 # 正确链接 GTest 的目标
 target_link_libraries(testDemo PRIVATE
