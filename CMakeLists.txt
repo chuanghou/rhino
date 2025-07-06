@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.28.3)
 project(rhino)
 
 # 3.24之后可以用，直接用Linux控制台可以，直接在windows用clion兼容有问题
+# 这两个变量主要是构建目录如果删除之后，可以保留之前下载的记录，其实这个类似maven的本地仓库能力
+# 这两个变量直接在linux上运行没问题，不过在clion内部添加，就不能用了，clion自己抛出了异常
+# 其实不加这两个也问题大，从git上拉代码一般也很快，每次重新拉也ok一般也不会删除构建目录
 #set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
 #set(FETCHCONTENT_BINARY_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch/build")
 
@@ -26,7 +29,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 
-# 拉取测试
+# 这个不知道怎么回事，并不会把_deps里面的代码从linux服务器全部拉到windows本地
+# 导致本地有些代码变红，不影响编译
+# 可以手动复制进去本地的目录，应该也是clion的bug之类的，或者capnproto cmake 搞得不太好
 FetchContent_Declare(
         capnproto
         GIT_REPOSITORY https://gitee.com/mirrors/capnproto.git
