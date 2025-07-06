@@ -1,9 +1,10 @@
-cmake_minimum_required(VERSION 3.24.0)
+cmake_minimum_required(VERSION 3.28.3)
 project(rhino)
 
-# 3.24之后机制
-set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/cache/fetch" CACHE PATH "下载缓存目录")
-set(FETCHCONTENT_BINARY_DIR "${FETCHCONTENT_BASE_DIR}/build" CACHE PATH "依赖项构建目录")
+# 3.24之后可以用，直接用Linux控制台可以，直接在windows用clion兼容有问题
+#set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
+#set(FETCHCONTENT_BINARY_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch/build")
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -33,6 +34,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(capnproto)
 
+
+FetchContent_Declare(
+        nlohmann-json
+        GIT_REPOSITORY https://gitee.com/mirrors/nlohmann-json.git
+        GIT_TAG        v3.12.0
+)
+FetchContent_MakeAvailable(nlohmann-json)
+
 # 启用测试
 enable_testing()
 
@@ -49,7 +58,8 @@ target_link_libraries(testDemo PRIVATE
         Boost::filesystem
         Boost::system
         CapnProto::kj
-        CapnProto::capnp)
+        CapnProto::capnp
+        nlohmann_json::nlohmann_json)
 
 # 添加测试
 include(GoogleTest)

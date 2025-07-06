@@ -12,6 +12,9 @@
 
 #include "capnp/myProto.capnp.h"
 
+#include <optional>
+#include <nlohmann/json.hpp>
+
 TEST(BoostTest, FileSystemTest) {
     namespace fs = boost::filesystem;
     // 1. 测试当前工作目录
@@ -23,6 +26,7 @@ TEST(BoostTest, FileSystemTest) {
 class MyInterface {
 public:
     virtual ~MyInterface() = default;
+
     virtual int Foo(int x) = 0;
 };
 
@@ -125,5 +129,113 @@ TEST(HelloTest, CapnpTest) {
     auto array = writeAddressBook();
 
     printAddressBook(array);
+}
+
+// ====================== 1. 为optional添加支持 ======================
+namespace nlohmann {
+    template <typename T>
+    struct adl_serializer<std::optional<T>> {
+        static void to_json(json& j, const std::optional<T>& opt) {
+            if (opt) {
+                j = *opt;
+            } else {
+                j = nullptr;
+            }
+        }
+
+        static void from_json(const json& j, std::optional<T>& opt) {
+            if (j.is_null()) {
+                opt = std::nullopt;
+            } else {
+                opt = j.get<T>();
+            }
+        }
+    };
+}
+
+// ====================== 1. 定义业务结构体（完全不修改原始定义） ======================
+struct Address {
+    std::string street;
+    std::string city;
+    std::string country;
+};
+
+struct Employee {
+    std::string name;
+    int age{};
+    std::vector<std::string> hobbies;
+    Address address;
+    std::optional<std::string> nickname; // 可选字段
+};
+
+// ====================== 2. 非侵入式序列化声明（在全局或相同命名空间） ======================
+// 声明Address的序列化方式
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Address, street, city, country);
+
+// 声明Person的序列化方式（包含嵌套对象）
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Employee, name, age, hobbies, address, nickname);
+
+// ====================== 3. 完整的 Jackson 风格工具类 ======================
+class JsonMapper {
+public:
+    template<typename T>
+    static std::string writeValue(const T &obj, bool pretty = false) {
+        nlohmann::json j = obj;
+        return pretty ? j.dump(4) : j.dump();
+    }
+
+    /**
+     * JSON字符串 → 对象
+     */
+    template<typename T>
+    static T readValue(const std::string &jsonStr) {
+        return nlohmann::json::parse(jsonStr).get<T>();
+    }
+
+    /**
+     * JSON字符串 → JSON对象（用于中间操作）
+     */
+    static nlohmann::json readTree(const std::string &jsonStr) {
+        return nlohmann::json::parse(jsonStr);
+    }
+
+    /**
+     * 对象 → JSON对象（用于中间操作）
+     */
+    template<typename T>
+    static nlohmann::json valueToTree(const T &obj) {
+        return obj;
+    }
+
+    /**
+     * JSON对象 → 对象
+     */
+    template<typename T>
+    static T treeToValue(const nlohmann::json &j) {
+        return j.get<T>();
+    }
+};
+
+TEST(HelloTest, nlohmann_json) {
+    Address addr{"123 Main St", "New York", "USA"};
+    Employee employee{"Alice", 25, {"reading", "coding"}, addr, "Ali"};
+
+    // 1. 完整转换流程
+    std::cout << "===== 完整转换流程 =====" << std::endl;
+    std::string jsonStr = JsonMapper::writeValue(employee, true);
+    std::cout << "序列化结果:\n" << jsonStr << std::endl;
+
+    auto restored = JsonMapper::readValue<Employee>(jsonStr);
+    std::cout << "\n反序列化结果name: " << restored.name << std::endl;
+
+    // 2. JSON树操作
+    std::cout << "\n===== JSON树操作 =====" << std::endl;
+    nlohmann::json tree = JsonMapper::readTree(jsonStr);
+    tree["age"] = 26;
+    tree["hobbies"].push_back("hiking");
+
+    auto modified = JsonMapper::treeToValue<Employee>(tree);
+    std::cout << "修改后的年龄: " << modified.age << std::endl;
+
 
 }
