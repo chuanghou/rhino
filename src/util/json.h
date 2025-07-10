@@ -2,13 +2,12 @@
 // Created by houchuang on 2025/7/6.
 //
 
-#ifndef JSON_H
-#define JSON_H
+#ifndef RHINO_UTIL_JSON_H
+#define RHINO_UTIL_JSON_H
 
 
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
-
 
 template<typename T>
 struct nlohmann::adl_serializer<std::optional<T> > {
@@ -60,4 +59,4 @@ namespace rhino::util::json {
     }
 }
 
-#endif //JSON_H
+#endif //RHINO_UTIL_JSON_H

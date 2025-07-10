@@ -47,31 +47,43 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(nlohmann-json)
 
+
+FetchContent_Declare(
+        POCO
+        GIT_REPOSITORY https://gitee.com/mirrors/POCO.git
+        GIT_TAG        poco-1.14.2-release
+)
+FetchContent_MakeAvailable(POCO)
+
 # 启用测试
 enable_testing()
 
-# 添加你的可执行文件
-add_executable(testDemo test/TestDemo.cpp
-        src/util/Json.h)
-
-# 正确链接 GTest 的目标
-target_link_libraries(testDemo PRIVATE
-        GTest::gtest
-        GTest::gmock
-        GTest::gtest_main
-        Threads::Threads
+set(MIDDLE_DEPS Threads::Threads
         Boost::boost
         Boost::filesystem
         Boost::system
         CapnProto::kj
         CapnProto::capnp
-        nlohmann_json::nlohmann_json)
+        nlohmann_json::nlohmann_json
+        Poco::Foundation)
+
+set(GTEST_DEPS GTest::gtest GTest::gmock GTest::gtest_main)
+
+add_executable(TestDemo test/TestDemo.cpp
+        src/util/json.h
+        src/util/time.h
+        src/util/string.h)
+target_link_libraries(TestDemo PRIVATE ${MIDDLE_DEPS} ${GTEST_DEPS})
+
+add_executable(WorkStation test/WorkStation.cpp)
+target_link_libraries(WorkStation PRIVATE ${GTEST_DEPS})
+
+
+add_executable(NlohmannTest test/NlohmannTest.cpp)
+target_link_libraries(NlohmannTest PRIVATE ${GTEST_DEPS} nlohmann_json::nlohmann_json)
 
 # 添加测试
 include(GoogleTest)
 
-# 发现测试
-gtest_discover_tests(testDemo)
-
-# TODO 集成 https://github.com/yhirose/cpp-httplib
+gtest_discover_tests(TestDemo NlohmannTest WorkStation)
 
