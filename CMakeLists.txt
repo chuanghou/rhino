@@ -31,7 +31,8 @@ set(DEPS Threads::Threads)
 # 可以看FindBoost.cmake源码验证
 # 同时还提供了Boost_INCLUDE_DIRS和Boost_LIBRARIES两个依赖对过去兼容
 
-set(BOOST_MODULES program_options filesystem system)
+list(APPEND BOOST_MODULES program_options filesystem system)
+message("BOOST_MODULES IS ${BOOST_MODULES}")
 find_package(Boost REQUIRED COMPONENTS ${BOOST_MODULES})
 if(Boost_FOUND)
     # 可以看出来Boost::boost 依赖了 Boost::headers
@@ -43,9 +44,9 @@ if(Boost_FOUND)
 else()
     message(FATAL_ERROR "Boost not found!")
 endif()
-list(APPEND DEPS Boost::headers)
-
-foreach (MODULE IN LISTS ${BOOST_MODULES})
+message("BOOST_MODULES IS ${BOOST_MODULES}")
+foreach (MODULE ${BOOST_MODULES})
+    message("BOOST_MODULES IS ${MODULE}")
     list(APPEND DEPS Boost::${MODULE})
     list(APPEND RUNTIME_DEPS Boost::${MODULE})
 endforeach ()
@@ -78,8 +79,7 @@ FetchContent_Declare(
         GIT_TAG        poco-1.14.2-release
 )
 FetchContent_MakeAvailable(POCO)
-list(APPEND Poco::Foundation)
-
+list(APPEND DEPS Poco::Foundation)
 
 file(GLOB_RECURSE cpp_files "src/*.cpp")
 # for capnproto
@@ -115,7 +115,7 @@ file(GLOB_RECURSE test_h_files "test/.h")
 add_executable(GTESTS ${cpp_files} ${c++_files} ${h_files} ${test_cpp_files} ${test_c++_files} ${test_h_files})
 target_compile_definitions(GTESTS PRIVATE GTESTS)
 target_link_libraries(GTESTS PRIVATE ${DEPS} ${GTEST_DEPS})
-
+target_include_directories(GTESTS PRIVATE ${GLOB_INCLUDE_DIRECTORY})
 include(GoogleTest)
 gtest_discover_tests(GTESTS)
 
