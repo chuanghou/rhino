@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.28.3)
 project(rhino)
 
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native -flto -fno-rtti")
@@ -14,7 +13,6 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native -flto -fno-rtti")
 # set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
 # set(FETCHCONTENT_BINARY_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch/build")
 
-
 # 设定全局依赖目录，主要是第三方的手动复制的头文件，和自己的头文件，所以依赖目录设置为dep/inc和src
 list(APPEND GLOB_INCLUDE_DIRECTORY ${PROJECT_SOURCE_DIR}/dep/inc ${PROJECT_SOURCE_DIR}/src)
 
@@ -26,13 +24,12 @@ list(APPEND GLOB_INCLUDE_DIRECTORY ${PROJECT_SOURCE_DIR}/dep/inc ${PROJECT_SOURC
 
 # 多线程包，这个是操作系统本身提供的，只是为了编译通过，会在最后的编译指令里面增加 -lpthread
 find_package(Threads REQUIRED)
-list(APPEND DEPS Threads::Threads)
+set(DEPS Threads::Threads)
 
 # 这个查找过程会产生4个目标 Boost::boost Boost::headers
 # 其中Boost::boost 和 Boost::headers 都是纯头文件依赖，其中Boost::boost是为了兼容过去的代码，内部其实link到Boost::headers里面
 # 可以看FindBoost.cmake源码验证
 # 同时还提供了Boost_INCLUDE_DIRS和Boost_LIBRARIES两个依赖对过去兼容
-
 
 set(BOOST_MODULES program_options filesystem system)
 find_package(Boost REQUIRED COMPONENTS ${BOOST_MODULES})
@@ -47,7 +44,8 @@ else()
     message(FATAL_ERROR "Boost not found!")
 endif()
 list(APPEND DEPS Boost::headers)
-foreach (MODULE : ${BOOST_MODULES})
+
+foreach (MODULE IN LISTS ${BOOST_MODULES})
     list(APPEND DEPS Boost::${MODULE})
     list(APPEND RUNTIME_DEPS Boost::${MODULE})
 endforeach ()
@@ -89,7 +87,7 @@ file(GLOB_RECURSE c++_files "src/*.c++")
 file(GLOB_RECURSE h_files "src/.h")
 
 add_executable(${PROJECT_NAME} ${cpp_files} ${c++_files} ${h_files})
-target_include_directories(${PROJECT_NAME} ${GLOB_INCLUDE_DIRECTORY})
+target_include_directories(${PROJECT_NAME} PUBLIC ${GLOB_INCLUDE_DIRECTORY})
 target_link_libraries(${PROJECT_NAME} ${DEPS})
 
 # GTEST
@@ -108,9 +106,6 @@ if (NOT googletest_POPULATED)
     add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif ()
 list(APPEND GTEST_DEPS GTest::gtest GTest::gmock GTest::gmock_main)
-foreach (MODULE : ${GTEST_DEPS})
-    set_target_properties(${MODULE} PROPERTIES EXCLUDE_FROM_INSTALL TRUE)
-endforeach ()
 
 file(GLOB_RECURSE test_cpp_files "test/*.cpp")
 # for capnproto
@@ -118,7 +113,7 @@ file(GLOB_RECURSE test_c++_files "test/*.c++")
 file(GLOB_RECURSE test_h_files "test/.h")
 
 add_executable(GTESTS ${cpp_files} ${c++_files} ${h_files} ${test_cpp_files} ${test_c++_files} ${test_h_files})
-target_compile_definitions(GTESTS -DGTESTS)
+target_compile_definitions(GTESTS PRIVATE GTESTS)
 target_link_libraries(GTESTS PRIVATE ${DEPS} ${GTEST_DEPS})
 
 include(GoogleTest)
