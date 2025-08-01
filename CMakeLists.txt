@@ -127,7 +127,6 @@ set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/target)
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 install(DIRECTORY config DESTINATION ${CMAKE_INSTALL_PREFIX})
 
-#ubuntu上会失效，因为ubuntu，运行时表达式会解析会实际文件，导致copy失效，没有符号
 foreach (DEP IN LISTS RUNTIME_DEPS)
     install(CODE "
         file(INSTALL \"$<TARGET_FILE:${DEP}>\"
