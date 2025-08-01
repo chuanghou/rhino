@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native -flto -fno-rtti")
 # 这变量直接在linux上运行没问题，不过在clion内部添加，就不能用了，clion自己抛出了异常
 # 其实不加这两个也问题大，从git上拉代码一般也很快，每次重新拉也ok一般也不会删除构建目录
 
-set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
+#set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
 
 # 设定全局依赖目录，主要是第三方的手动复制的头文件，和自己的头文件，所以依赖目录设置为dep/inc和src
 list(APPEND GLOB_INCLUDE_DIRECTORY ${PROJECT_SOURCE_DIR}/dep/inc ${PROJECT_SOURCE_DIR}/src)
@@ -43,9 +43,7 @@ if(Boost_FOUND)
 else()
     message(FATAL_ERROR "Boost not found!")
 endif()
-message("BOOST_MODULES IS ${BOOST_MODULES}")
 foreach (MODULE ${BOOST_MODULES})
-    message("BOOST_MODULES IS ${MODULE}")
     list(APPEND DEPS Boost::${MODULE})
     list(APPEND RUNTIME_DEPS Boost::${MODULE})
 endforeach ()
@@ -53,15 +51,16 @@ endforeach ()
 # 包含 FetchContent 模块
 include(FetchContent)
 
-# 这个不知道怎么回事，并不会把_deps里面的代码从linux服务器全部拉到windows本地
-# 导致本地有些代码变红，不影响编译
-# 可以手动复制进去本地的目录，应该也是clion的bug之类的，或者capnproto cmake 搞得不太好
 FetchContent_Declare(
         capnproto
         GIT_REPOSITORY https://gitee.com/mirrors/capnproto.git
         GIT_TAG        v1.2.0
 )
-FetchContent_MakeAvailable(capnproto)
+FetchContent_GetProperties(capnproto)
+if (NOT capnproto_POPULATED)
+    FetchContent_Populate(capnproto)
+    add_subdirectory(${capnproto_SOURCE_DIR} ${capnproto_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif ()
 list(APPEND DEPS CapnProto::kj CapnProto::capnp)
 
 FetchContent_Declare(
@@ -72,13 +71,17 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(nlohmann-json)
 list(APPEND DEPS nlohmann_json::nlohmann_json)
 
-#FetchContent_Declare(
-#        POCO
-#        GIT_REPOSITORY https://gitee.com/mirrors/POCO.git
-#        GIT_TAG        poco-1.14.2-release
-#)
-#FetchContent_MakeAvailable(POCO)
-#list(APPEND DEPS Poco::Foundation)
+FetchContent_Declare(
+        POCO
+        GIT_REPOSITORY https://gitee.com/mirrors/POCO.git
+        GIT_TAG        poco-1.14.2-release
+)
+FetchContent_GetProperties(POCO)
+if (NOT POCO_POPULATED)
+    FetchContent_Populate(POCO)
+endif ()
+list(APPEND DEPS Poco::Foundation)
+list(APPEND RUNTIME_DEPS Poco::Foundation)
 
 file(GLOB_RECURSE cpp_files "src/*.cpp")
 # for capnproto
