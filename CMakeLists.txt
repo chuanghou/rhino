@@ -5,13 +5,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native -flto -fno-rtti")
 
-# 3.24之后可以用，直接用Linux控制台可以，直接在windows用clion兼容有问题
-# 这两个变量主要是构建目录如果删除之后，可以保留之前下载的记录，其实这个类似maven的本地仓库能力
-# 这两个变量直接在linux上运行没问题，不过在clion内部添加，就不能用了，clion自己抛出了异常
+# 3.11之后可以用，直接用Linux控制台可以，直接在windows用clion兼容有问题
+# 这变量主要是构建目录如果删除之后，可以保留之前下载的记录，其实这个类似maven的本地仓库能力
+# 这变量直接在linux上运行没问题，不过在clion内部添加，就不能用了，clion自己抛出了异常
 # 其实不加这两个也问题大，从git上拉代码一般也很快，每次重新拉也ok一般也不会删除构建目录
 
-# set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
-# set(FETCHCONTENT_BINARY_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch/build")
+set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
 
 # 设定全局依赖目录，主要是第三方的手动复制的头文件，和自己的头文件，所以依赖目录设置为dep/inc和src
 list(APPEND GLOB_INCLUDE_DIRECTORY ${PROJECT_SOURCE_DIR}/dep/inc ${PROJECT_SOURCE_DIR}/src)
@@ -73,13 +72,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(nlohmann-json)
 list(APPEND DEPS nlohmann_json::nlohmann_json)
 
-FetchContent_Declare(
-        POCO
-        GIT_REPOSITORY https://gitee.com/mirrors/POCO.git
-        GIT_TAG        poco-1.14.2-release
-)
-FetchContent_MakeAvailable(POCO)
-list(APPEND DEPS Poco::Foundation)
+#FetchContent_Declare(
+#        POCO
+#        GIT_REPOSITORY https://gitee.com/mirrors/POCO.git
+#        GIT_TAG        poco-1.14.2-release
+#)
+#FetchContent_MakeAvailable(POCO)
+#list(APPEND DEPS Poco::Foundation)
 
 file(GLOB_RECURSE cpp_files "src/*.cpp")
 # for capnproto
@@ -126,7 +125,7 @@ install(DIRECTORY config DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 foreach (DEP IN LISTS RUNTIME_DEPS)
     install(CODE "
-        file(INSTALL \"<TARGET_FILE:${DEP}>\"
+        file(INSTALL \"$<TARGET_FILE:${DEP}>\"
             DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib\"
             TYPE FILE
             FOLLOW_SYMLINK_CHAIN)
