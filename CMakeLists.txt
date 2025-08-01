@@ -72,13 +72,14 @@ FetchContent_MakeAvailable(nlohmann-json)
 list(APPEND DEPS nlohmann_json::nlohmann_json)
 
 FetchContent_Declare(
-        POCO
+        poco
         GIT_REPOSITORY https://gitee.com/mirrors/POCO.git
         GIT_TAG        poco-1.14.2-release
 )
-FetchContent_GetProperties(POCO)
-if (NOT POCO_POPULATED)
-    FetchContent_Populate(POCO)
+FetchContent_GetProperties(poco)
+if (NOT poco_POPULATED)
+    FetchContent_Populate(poco)
+    add_subdirectory(${poco_SOURCE_DIR} ${poco_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif ()
 list(APPEND DEPS Poco::Foundation)
 list(APPEND RUNTIME_DEPS Poco::Foundation)
