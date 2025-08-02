@@ -10,7 +10,10 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native -flto -fno-rtti")
 # 这变量直接在linux上运行没问题，不过在clion内部添加，就不能用了，clion自己抛出了异常
 # 其实不加这两个也问题大，从git上拉代码一般也很快，每次重新拉也ok一般也不会删除构建目录
 
-#set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
+if (USE_FETCH_CACHE)
+    message(STATUS "use fecth cache")
+    set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
+endif ()
 
 # 设定全局依赖目录，主要是第三方的手动复制的头文件，和自己的头文件，所以依赖目录设置为dep/inc和src
 list(APPEND GLOB_INCLUDE_DIRECTORY ${PROJECT_SOURCE_DIR}/dep/inc ${PROJECT_SOURCE_DIR}/src)

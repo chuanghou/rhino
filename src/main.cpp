@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     if (vm.empty())
     {
         std::cout << "no options" << std::endl;
-        return;
+        return -1;
     }
     if (vm.count("about"))
     {
@@ -26,5 +26,6 @@ int main(int argc, char* argv[]) {
     {
         std::cout <<"version is V3.3.0" << std::endl;
     }
+    return 0;
 }
 #endif
