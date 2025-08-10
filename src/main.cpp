@@ -1,10 +1,7 @@
 #include <iostream>
 #include <string>
 
-
-
-
-#ifndef GTESTS
+#ifndef COMPILE_WHEN_TEST
 #include <boost/program_options.hpp>
 int main(int argc, char* argv[]) {
     boost::program_options::options_description opts("demo options");
