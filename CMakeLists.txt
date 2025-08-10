@@ -27,7 +27,7 @@ endforeach ()
 
 # 多线程包，这个是操作系统本身提供的，只是为了编译通过，会在最后的编译指令里面增加 -lpthread
 find_package(Threads REQUIRED)
-set(DEPS Threads::Threads)
+list(APPEND DEPS Threads::Threads)
 
 
 # Boost依赖
