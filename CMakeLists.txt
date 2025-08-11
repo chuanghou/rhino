@@ -9,10 +9,10 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native -flto -fno-rtti")
 list(APPEND GLOB_INCLUDE_DIRECTORY ${PROJECT_SOURCE_DIR}/dep ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/test)
 file(GLOB_RECURSE COPY_DEP_H_FILES "dep/*.h")
 
-list(APPEND COPY_SO_FILE_DIRS 
-    dep/copy-dep-a-with-so/lib
-    dep/copy-dep-b-with-so/lib
-)
+# list(APPEND COPY_SO_FILE_DIRS 
+#     dep/copy-dep-a-with-so/lib
+#     dep/copy-dep-b-with-so/lib
+# )
 
 foreach (SO_FILE_DIR ${COPY_SO_FILE_DIRS})
     file(GLOB SO_FILES "${SO_FILE_DIR}/*.so*")
