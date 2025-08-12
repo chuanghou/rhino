@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "iostream": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "iosfwd": "cpp"
+    },
+    "cmake.configureOnEdit": false, // 禁止编辑 CMakeLists.txt 时自动重新配置
+    "cmake.configureSettings": {
+        "CMAKE_SUPPRESS_REGENERATION": "ON" // 可选：与 CMake 选项配合
     }
 }

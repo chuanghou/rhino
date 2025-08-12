@@ -58,17 +58,19 @@ add_executable(${PROJECT_NAME} ${SRC_FILES} ${COPY_DEP_H_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLOB_INCLUDE_DIRECTORY})
 target_link_libraries(${PROJECT_NAME} ${DEPS})
 
+
 # 测试配置及依赖
 enable_testing()
-file(GLOB_RECURSE TEST_FILES "src/*.cpp" "src/*.c++" "src/*.h")
+file(GLOB_RECURSE TEST_FILES "test/*.cpp" "test/*.c++" "test/*.h")
 set(TEST_TARGET ${PROJECT_NAME}_tests)
 add_executable(${TEST_TARGET} ${SRC_FILES} ${TEST_FILES} ${COPY_DEP_H_FILES})
 target_compile_definitions(${TEST_TARGET} PRIVATE COMPILE_WHEN_TEST)
 target_link_libraries(${TEST_TARGET} PRIVATE ${DEPS} ${TEST_DEPS})
 target_include_directories(${TEST_TARGET} PRIVATE ${GLOB_INCLUDE_DIRECTORY})
 include(GoogleTest)
-gtest_discover_tests(${TEST_TARGET})
-
+gtest_discover_tests(${TEST_TARGET}
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)
 
 # 安装部分
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/target)
