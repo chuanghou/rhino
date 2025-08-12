@@ -5,6 +5,7 @@
 #include<iostream>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "httplib.h"
 
 TEST(poco_test, string_test) {
     std::string s1 = "hello world";

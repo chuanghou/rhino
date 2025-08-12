@@ -61,6 +61,15 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(tomlplusplus)
 list(APPEND FETCH_DEPS tomlplusplus::tomlplusplus)
 
+
+FetchContent_Declare(
+    cpp-httplib
+    GIT_REPOSITORY https://gitee.com/mirrors_trending/cpp-httplib.git
+    GIT_TAG        v0.25.0
+)
+FetchContent_MakeAvailable(cpp-httplib)
+list(APPEND FETCH_DEPS httplib::httplib)
+
 FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://gitee.com/mirrors/googletest.git

@@ -10,6 +10,7 @@
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
 #include <utility>
+#include "boost/lockfree/spsc_queue.hpp"
 
 template<typename T>
 struct nlohmann::adl_serializer<std::optional<T> > {

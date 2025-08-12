@@ -1,10 +1,5 @@
-//
-// Created by houchuang on 2025/7/6.
-//
 
-#ifndef RHINO_UTIL_JSON_H
-#define RHINO_UTIL_JSON_H
-
+#pragma once
 
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
@@ -28,35 +23,33 @@ struct nlohmann::adl_serializer<std::optional<T> > {
     }
 };
 
-namespace rhino::util::json {
+namespace rhino {
     template<typename T>
-    std::string to_json(const T &obj, bool pretty = false) {
+    std::string toJson(const T &obj, bool pretty = false) {
         nlohmann::json j = obj;
         return pretty ? j.dump(4) : j.dump();
     }
 
     template<typename T>
-    T from_json(const std::string &value) {
+    T fromJson(const std::string &value) {
         return nlohmann::json::parse(value).get<T>();
     }
 
-    inline std::string from_json_tree(const nlohmann::json &j, bool pretty = false) {
+    inline std::string fromJsonTree(const nlohmann::json &j, bool pretty = false) {
         return pretty ? j.dump(4) : j.dump();
     }
 
-    inline nlohmann::json to_json_tree(const std::string &value) {
+    inline nlohmann::json toJsonTree(const std::string &value) {
         return nlohmann::json::parse(value);
     }
 
     template<typename T>
-    nlohmann::json to_json_tree(const T &obj) {
+    nlohmann::json toJsonTree(const T &obj) {
         return obj;
     }
 
     template<typename T>
-    T from_json_tree(const nlohmann::json &j) {
+    T fromJsonTree(const nlohmann::json &j) {
         return j.get<T>();
     }
 }
-
-#endif //RHINO_UTIL_JSON_H
