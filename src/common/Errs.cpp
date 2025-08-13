@@ -1,6 +1,6 @@
 
 
-#include "errs.h"
+#include "Errs.h"
 
 namespace rhino {
 

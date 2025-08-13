@@ -15,7 +15,11 @@ struct EGrp {
     EGrp() = default;
 
     EGrp(const int32_t code, std::string semanticCode)
-        : code(code), semanticCode(std::move(semanticCode)) {}
+        : code(code), semanticCode(std::move(semanticCode)) {
+            if (code == 0) {
+                throw std::runtime_error("you should not use zero as a error group code");
+            }
+        }
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(EGrp, code, semanticCode);
 
@@ -24,17 +28,21 @@ struct EGrp {
 
 struct Err {
 
+    bool sysErr{};
     int32_t code{};
     std::string semanticCode;
     std::string msg;
 
-    Err() = default;
-
     Err(const int32_t code, std::string semanticCode, std::string defaultMsg)
         : code(code), semanticCode(std::move(semanticCode)),
-          msg(std::move(defaultMsg)) {}
+          msg(std::move(defaultMsg)) {
+        if (code == 0) {
+            throw std::runtime_error("errCode should not be 0!");
+        }
+        sysErr = code < 0;
+    }
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Err, code, semanticCode, msg);
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Err, sysErr, code, semanticCode, msg);
 
     static Err SYS_ERR;
 

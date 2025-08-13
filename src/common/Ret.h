@@ -27,38 +27,23 @@ template <class T> class Ret {
         : success(success), sysErr(sysErr), eGrp(std::move(eGrp)),
           err(std::move(err)) {}
 
-    bool succeed() const { return success; }
-
-    bool sysErr() const { return sysErr; }
-
-    T getData() const { return data; }
-
     bool failed() const { return !success; }
 
     EGrp getEGrp() const { return eGrp; }
 
     Err getErr() const { return err; }
 
-    static Ret successWith(T data) { return Ret(data); }
+    static Ret with(T data) { return Ret(data); }
 
     static Ret<void *> successOfNullptr;
 
-    static Ret sysErr(EGrp &eGrp, Err &err) {
+    static Ret with(EGrp &eGrp, Err &err) {
         return Ret(false, true, eGrp, err);
     }
 
-    static Ret sysErr(EGrp &eGrp, Err &err, const std::string &errMsg) {
+    static Ret with(EGrp &eGrp, Err &err, const std::string &errMsg) {
         err.msg = errMsg;
         return Ret(false, true, eGrp, err);
-    }
-
-    static Ret bizErr(EGrp &eGrp, Err &err) {
-        return Ret(false, false, eGrp, err);
-    }
-
-    static Ret bizErr(EGrp &eGrp, Err &err, const std::string &errMsg) {
-        err.msg = errMsg;
-        return Ret(false, false, eGrp, err);
     }
 
     template <typename S> static Ret<T> FailureTransfer(Ret<S> source) {
