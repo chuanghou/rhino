@@ -8,6 +8,7 @@ sudo apt install gdb -y
 sudo apt install zip -y
 sudo apt install unzip -y
 sudo apt install openjdk-8-jdk -y
+sudo apt install libabsl-dev -y
 echo "export PS1='\u@\h:\W\$ '" >> .bashrc
 
 # 安装 capnproto https://capnproto.org/install.html
