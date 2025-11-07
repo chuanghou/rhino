@@ -5,7 +5,7 @@
 
 namespace rhhno {
 
-int32_t fastStoiNotSafely(const char *val) {
+inline int32_t FastStoiNotSafely(const char *val) {
     int32_t number = 0;
     for (size_t i = 0;; i++) {
         if (val[i] == '\0') {
@@ -14,8 +14,8 @@ int32_t fastStoiNotSafely(const char *val) {
         number = (number << 3) + (number << 1) + val[i] - '0';
     }
 }
-int32_t fastStoiNotSafely(const std::string &val) {
-    return fastStoiNotSafely(val.c_str());
+int32_t FastStoiNotSafely(const std::string &val) {
+    return FastStoiNotSafely(val.c_str());
 }
 
 /**

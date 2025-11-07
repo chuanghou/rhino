@@ -12,7 +12,7 @@ so easy. You can offer your only specific validation macro like we offered, just
 
 */
 // class Entity {
-//     Var(int32_t, score, Postive("Score must be positive");
+//     Var(int32_t, score, Positive("Score must be positive");
 //         LessThan(100, "Score must be < 100"););
 // };
 
@@ -43,13 +43,13 @@ so easy. You can offer your only specific validation macro like we offered, just
     }                                                                          \
     type get_##name() const { return name##_; }
 
-#define Postive(msg)                                                           \
+#define Positive(msg)                                                           \
     {                                                                          \
         if (value <= 0)                                                        \
             throw std::invalid_argument(msg);                                  \
     }
 
-#define PostiveOrZero(msg)                                                     \
+#define PositiveOrZero(msg)                                                     \
     {                                                                          \
         if (value <= 0)                                                        \
             throw std::invalid_argument(msg);                                  \
