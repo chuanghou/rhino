@@ -13,3 +13,10 @@ sudo apt install libsqlite3-dev -y
 echo "export PS1='\u@\h:\W\$ '" >> .bashrc
 
 # 安装 capnproto https://capnproto.org/install.html
+curl -O https://capnproto.org/capnproto-c++-1.2.0.tar.gz
+tar zxf capnproto-c++-1.2.0.tar.gz
+cd capnproto-c++-1.2.0
+./configure
+make -j6 check
+sudo make install
+cd ..
