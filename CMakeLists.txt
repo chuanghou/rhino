@@ -44,6 +44,13 @@ foreach(BOOST_MODULE ${BOOST_RUNTIME_MODULES})
     list(APPEND RUNTIME_DEPS Boost::${BOOST_MODULE})
 endforeach()
 
+# SQLite3依赖
+find_package(SQLite3 REQUIRED COMPONENTS SQLite3)
+if (NOT SQLite3_FOUND)
+    message(FATAL_ERROR "SQLite3 not found!")
+endif ()
+list(APPEND DEPS SQLite::SQLite3)
+list(APPEND RUNTIME_DEPS SQLite::SQLite3)
 
 # FetchContent依赖
 include(FetchDeps.cmake)
