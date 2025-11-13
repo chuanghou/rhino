@@ -1,4 +1,4 @@
-sudo yum groupinstall "Development Tools"
+sudo yum groupinstall "Development Tools" -y
 sudo yum install cmake -y
 sudo yum install boost-devel -y
 sudo yum install java-1.8.0-openjdk-devel.x86_64 -y
