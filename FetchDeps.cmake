@@ -19,17 +19,18 @@
 # 包含 FetchContent 模块
 include(FetchContent)
 
-FetchContent_Declare(
-        capnproto
-        GIT_REPOSITORY https://gitee.com/mirrors/capnproto.git
-        GIT_TAG        v1.2.0
-)
-FetchContent_GetProperties(capnproto)
-if (NOT capnproto_POPULATED)
-    FetchContent_Populate(capnproto)
-    add_subdirectory(${capnproto_SOURCE_DIR} ${capnproto_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif ()
-list(APPEND FETCH_DEPS CapnProto::kj CapnProto::capnp)
+#注释部分为使用FetchContent方式拉取，可以在编译机上提前装好更省事
+#FetchContent_Declare(
+#        capnproto
+#        GIT_REPOSITORY https://gitee.com/mirrors/capnproto.git
+#        GIT_TAG        v1.2.0
+#)
+#FetchContent_GetProperties(capnproto)
+#if (NOT capnproto_POPULATED)
+#    FetchContent_Populate(capnproto)
+#    add_subdirectory(${capnproto_SOURCE_DIR} ${capnproto_BINARY_DIR} EXCLUDE_FROM_ALL)
+#endif ()
+#list(APPEND FETCH_DEPS CapnProto::kj CapnProto::capnp)
 
 FetchContent_Declare(
         nlohmann-json
