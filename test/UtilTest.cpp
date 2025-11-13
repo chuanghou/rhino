@@ -15,7 +15,7 @@
 #include <optional>
 #include <nlohmann/json.hpp>
 
-#include "util/JsonUtil.h"
+#include "util/JsonUtil.hpp"
 
 using namespace rhino;
 using namespace std;

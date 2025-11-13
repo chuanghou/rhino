@@ -104,31 +104,28 @@ struct HotConfig {
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(HotConfig, boolConfig1, int32Config1, stringConfig1);
 };
 
+struct TestEntity {
+    double s{};
+    int32_t b{};
+    std::string name;
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(TestEntity, s, b, name);
+
+};
+
 TEST(NlohmannTest, Serialize) {
-    HotConfig hotConfig;
-    auto jsonRet = util::json::to_json(hotConfig, true);
 
-    std::string s = R"({
-    "boolConfig1": {
-        "desc": "aaa",
-        "type": "bool",
-        "value": false
-    },
-    "int32Config1": {
-        "desc": "bbbb",
-        "type": "int32",
-        "value": 0
-    },
-    "stringConfig1": {
-        "desc": "cccc",
-        "type": "string",
-        "value": ""
-    }
-})";
+    TestEntity test;
+    test.s = 0.3;
+    test.b = 1;
+    test.name = "test";
 
-    auto newConfig = util::json::from_json<HotConfig>(s);
+    auto s = util::json::to_json(test);
+    auto testEntity = util::json::from_json<TestEntity>(s);
+    std::cout << testEntity.s << std::endl;
+    std::cout << testEntity.b << std::endl;
 
-    std::cout << util::json::to_json(hotConfig, true) << std::endl;
+
+
 
 
 }

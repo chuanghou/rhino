@@ -1,9 +1,10 @@
+#pragma once
 
 #include <cstdint>
 #include <iostream>
+#include <regex>
 #include <stdexcept>
 #include <vector>
-#include <regex>
 /*
 Validation.h offer a bunch of common used macro use to validate entity field. The idea comes 
 from JSR 303, but c++ does not offer annotation or reflection until now. User Var macro and validations
@@ -34,7 +35,7 @@ so easy. You can offer your only specific validation macro like we offered, just
 
 #define Var(type, name, ...)                                                   \
   private:                                                                     \
-    type name##_;                                                              \
+    type name##_{};                                                            \
                                                                                \
   public:                                                                      \
     void set_##name(type value) {                                              \
@@ -43,13 +44,13 @@ so easy. You can offer your only specific validation macro like we offered, just
     }                                                                          \
     type get_##name() const { return name##_; }
 
-#define Positive(msg)                                                           \
+#define Positive(msg)                                                          \
     {                                                                          \
         if (value <= 0)                                                        \
             throw std::invalid_argument(msg);                                  \
     }
 
-#define PositiveOrZero(msg)                                                     \
+#define PositiveOrZero(msg)                                                    \
     {                                                                          \
         if (value <= 0)                                                        \
             throw std::invalid_argument(msg);                                  \

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22.1)
+cmake_minimum_required(VERSION 3.20.2)
 project(rhino)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -32,7 +32,7 @@ list(APPEND DEPS Threads::Threads)
 
 # Boost依赖
 list(APPEND BOOST_RUNTIME_MODULES program_options filesystem system)
-list(APPEND BOOST_MODULES headers ${BOOST_RUNTIME_MODULES})
+list(APPEND BOOST_MODULES ${BOOST_RUNTIME_MODULES})
 find_package(Boost REQUIRED COMPONENTS ${BOOST_MODULES})
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost not found!")

@@ -71,6 +71,15 @@ FetchContent_MakeAvailable(cpp-httplib)
 list(APPEND FETCH_DEPS httplib::httplib)
 
 FetchContent_Declare(
+        sqlite_orm
+        GIT_REPOSITORY https://gitee.com/mirrors_fnc12/sqlite_orm.git
+        GIT_TAG        v1.9.1
+)
+FetchContent_MakeAvailable(sqlite_orm)
+list(APPEND FETCH_DEPS sqlite_orm::sqlite_orm)
+
+
+FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://gitee.com/mirrors/googletest.git
         GIT_TAG        v1.17.0

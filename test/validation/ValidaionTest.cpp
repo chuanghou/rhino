@@ -3,14 +3,14 @@
 using namespace std;
 
 class Entity {
-    Var(int32_t, score, 
-        Postive("Score must be positive");
+    Var(int32_t, score,
+        Positive("Score must be positive");
         LessThan(100, "Score must be < 100"););
 };
 
 TEST(ValidationTest, protoType) {
 
-    Entity en;
+    Entity en{};
 
     bool ret = false;
     try {

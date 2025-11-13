@@ -8,25 +8,23 @@ namespace rhino {
 
 class PostProcessor {
   public:
+    virtual ~PostProcessor() = default;
     virtual void PostProcess() {}
 };
 
-class StringCfg : public PostProcessor {
-  public:
+struct  StringCfg final : PostProcessor {
     std::string desc;
     std::string val;
     std::string type = "string";
 };
 
-struct Int32Cfg : public PostProcessor {
-  public:
+struct Int32Cfg final : PostProcessor {
     std::string desc;
     int32_t val;
     std::string type = "int32";
 };
 
-struct BoolCfg : public PostProcessor {
-  public:
+struct BoolCfg final : PostProcessor {
     std::string desc;
     bool val;
     std::string type = "bool";

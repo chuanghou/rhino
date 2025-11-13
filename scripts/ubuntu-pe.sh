@@ -20,3 +20,10 @@ cd capnproto-c++-1.2.0
 make -j6 check
 sudo make install
 cd ..
+git clone -b lts_2025_08_14 --single-branch https://gitee.com/mirrors/Abseil.git
+cd Abseil
+mkdir build
+cd build
+cmake .. -DCMAKE_CXX_STANDARD=17 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+make -j6
+make install
