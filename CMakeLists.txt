@@ -49,42 +49,37 @@ if (NOT SQLite3_FOUND)
     message(FATAL_ERROR "SQLite3 not found!")
 endif ()
 list(APPEND DEPS SQLite::SQLite3)
-list(APPEND RUNTIME_DEPS SQLite::SQLite3)
 
 # FetchContent依赖
 include(FetchDeps.cmake)
 
 fetch_dep(https://gitee.com/mirrors/capnproto.git v1.2.0)
-list(APPEND FETCH_DEPS CapnProto::kj CapnProto::capnp)
+list(APPEND DEPS CapnProto::kj CapnProto::capnp)
 
 fetch_dep(https://gitee.com/mirrors/nlohmann-json.git v3.12.0)
-list(APPEND FETCH_DEPS nlohmann_json::nlohmann_json)
+list(APPEND DEPS nlohmann_json::nlohmann_json)
 
 fetch_dep(https://gitee.com/mirrors_GerHobbelt/tomlplusplus v3.4.0)
-list(APPEND FETCH_DEPS tomlplusplus::tomlplusplus)
+list(APPEND DEPS tomlplusplus::tomlplusplus)
 
 fetch_dep(https://gitee.com/mirrors_trending/cpp-httplib.git v0.25.0)
-list(APPEND FETCH_DEPS httplib::httplib)
+list(APPEND DEPS httplib::httplib)
 
 fetch_dep(https://gitee.com/mirrors_fnc12/sqlite_orm.git v1.9.1)
-list(APPEND FETCH_DEPS sqlite_orm::sqlite_orm)
+list(APPEND DEPS sqlite_orm::sqlite_orm)
 
 fetch_dep(https://gitee.com/mirrors/Abseil.git lts_2025_08_14 )
-list(APPEND FETCH_DEPS absl::base absl::strings)
+list(APPEND DEPS absl::base absl::strings)
 
 fetch_dep(https://gitee.com/mirrors/googletest.git v1.17.0)
-list(APPEND TEST_FETCH_DEPS GTest::gtest GTest::gmock GTest::gmock_main)
-
-list(APPEND DEPS ${FETCH_DEPS})
-list(APPEND TEST_DEPS ${TEST_FETCH_DEPS})
-list(APPEND RUNTIME_DEPS ${RUNTIME_FETCH_DEPS})
+list(APPEND DEPS GTest::gtest GTest::gmock GTest::gmock_main)
+list(APPEND TEST_DEPS GTest::gtest GTest::gmock GTest::gmock_main)
 
 # 项目主编译产物
 file(GLOB_RECURSE SRC_FILES "src/*.cpp" "src/*.c++" "src/*.h")
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${COPY_DEP_H_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLOB_INCLUDE_DIRECTORY})
 target_link_libraries(${PROJECT_NAME} ${DEPS})
-
 
 # 测试配置及依赖
 enable_testing()
@@ -103,7 +98,7 @@ gtest_discover_tests(${TEST_TARGET}
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/target)
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 install(DIRECTORY config DESTINATION ${CMAKE_INSTALL_PREFIX})
-foreach (DEP ${RUNTIME_DEPS})
+foreach (DEP ${DEPS})
     install(CODE "
         file(INSTALL \"$<TARGET_FILE:${DEP}>\"
             DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib\"
