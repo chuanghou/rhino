@@ -19,75 +19,23 @@
 # 包含 FetchContent 模块
 include(FetchContent)
 
-#注释部分为使用FetchContent方式拉取，可以在编译机上提前装好更省事
-#FetchContent_Declare(
-#        capnproto
-#        GIT_REPOSITORY https://gitee.com/mirrors/capnproto.git
-#        GIT_TAG        v1.2.0
-#)
-#FetchContent_GetProperties(capnproto)
-#if (NOT capnproto_POPULATED)
-#    FetchContent_Populate(capnproto)
-#    add_subdirectory(${capnproto_SOURCE_DIR} ${capnproto_BINARY_DIR} EXCLUDE_FROM_ALL)
-#endif ()
-#list(APPEND FETCH_DEPS CapnProto::kj CapnProto::capnp)
+macro(fetch_dep repo tag)
+    get_filename_component(name "${repo}" NAME_WE)
+    string(TOLOWER "${name}" name)
+    FetchContent_Declare(
+            ${name}
+            GIT_REPOSITORY ${repo}
+            GIT_TAG        ${tag}
+    )
+    FetchContent_GetProperties(${name})
+    if(NOT ${name}_POPULATED)
+        FetchContent_Populate(${name})
+        add_subdirectory(${${name}_SOURCE_DIR} ${${name}_BINARY_DIR} EXCLUDE_FROM_ALL)
+    endif()
+endmacro()
 
-FetchContent_Declare(
-        nlohmann-json
-        GIT_REPOSITORY https://gitee.com/mirrors/nlohmann-json.git
-        GIT_TAG        v3.12.0
-)
-FetchContent_MakeAvailable(nlohmann-json)
-list(APPEND FETCH_DEPS nlohmann_json::nlohmann_json)
-
-# FetchContent_Declare(
-#         poco
-#         GIT_REPOSITORY https://gitee.com/mirrors/POCO.git
-#         GIT_TAG        poco-1.14.2-release
-# )
-# FetchContent_GetProperties(poco)
-# if (NOT poco_POPULATED)
-#     FetchContent_Populate(poco)
-#     add_subdirectory(${poco_SOURCE_DIR} ${poco_BINARY_DIR} EXCLUDE_FROM_ALL)
-# endif ()
+#fetch_dep(poco https://gitee.com/mirrors/POCO.git poco-1.14.2-release)
 # list(APPEND FETCH_DEPS Poco::Foundation)
 # list(APPEND RUNTIME_FETCH_DEPS Poco::Foundation)
 
 
-FetchContent_Declare(
-    tomlplusplus
-    GIT_REPOSITORY https://gitee.com/mirrors_GerHobbelt/tomlplusplus
-    GIT_TAG        v3.4.0
-)
-FetchContent_MakeAvailable(tomlplusplus)
-list(APPEND FETCH_DEPS tomlplusplus::tomlplusplus)
-
-
-FetchContent_Declare(
-    cpp-httplib
-    GIT_REPOSITORY https://gitee.com/mirrors_trending/cpp-httplib.git
-    GIT_TAG        v0.25.0
-)
-FetchContent_MakeAvailable(cpp-httplib)
-list(APPEND FETCH_DEPS httplib::httplib)
-
-FetchContent_Declare(
-        sqlite_orm
-        GIT_REPOSITORY https://gitee.com/mirrors_fnc12/sqlite_orm.git
-        GIT_TAG        v1.9.1
-)
-FetchContent_MakeAvailable(sqlite_orm)
-list(APPEND FETCH_DEPS sqlite_orm::sqlite_orm)
-
-
-FetchContent_Declare(
-        googletest
-        GIT_REPOSITORY https://gitee.com/mirrors/googletest.git
-        GIT_TAG        v1.17.0
-)
-FetchContent_GetProperties(googletest)
-if (NOT googletest_POPULATED)
-    FetchContent_Populate(googletest)
-    add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif ()
-list(APPEND TEST_FETCH_DEPS GTest::gtest GTest::gmock GTest::gmock_main)
