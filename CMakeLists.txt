@@ -21,7 +21,7 @@ foreach (SO_FILE_DIR ${COPY_SO_FILE_DIRS})
         add_library(${SO_NAME} SHARED IMPORTED)
         set_target_properties(${SO_NAME} PROPERTIES IMPORTED_LOCATION ${SO_FILE})
         list(APPEND DEPS ${SO_NAME})
-        list(APPEND RUNTIME_DEPS ${SO_NAME})
+        list(APPEND SHARED_DEPS ${SO_NAME})
     endforeach ()
 endforeach ()
 
@@ -30,18 +30,15 @@ find_package(Threads REQUIRED)
 list(APPEND DEPS Threads::Threads)
 
 # Boost依赖
-list(APPEND BOOST_RUNTIME_MODULES program_options filesystem system)
-list(APPEND BOOST_MODULES ${BOOST_RUNTIME_MODULES})
+list(APPEND BOOST_MODULES program_options filesystem system)
 find_package(Boost REQUIRED COMPONENTS ${BOOST_MODULES})
-if(NOT Boost_FOUND)
+if (NOT Boost_FOUND)
     message(FATAL_ERROR "Boost not found!")
-endif()
-foreach(BOOST_MODULE ${BOOST_MODULES})
+endif ()
+foreach (BOOST_MODULE ${BOOST_MODULES})
     list(APPEND DEPS Boost::${BOOST_MODULE})
-endforeach()
-foreach(BOOST_MODULE ${BOOST_RUNTIME_MODULES})
-    list(APPEND RUNTIME_DEPS Boost::${BOOST_MODULE})
-endforeach()
+    list(APPEND SHARED_DEPS Boost::${BOOST_MODULE})
+endforeach ()
 
 # SQLite3依赖
 find_package(SQLite3 REQUIRED COMPONENTS SQLite3)
@@ -68,7 +65,7 @@ list(APPEND DEPS httplib::httplib)
 fetch_dep(https://gitee.com/mirrors_fnc12/sqlite_orm.git v1.9.1)
 list(APPEND DEPS sqlite_orm::sqlite_orm)
 
-fetch_dep(https://gitee.com/mirrors/Abseil.git lts_2025_08_14 )
+fetch_dep(https://gitee.com/mirrors/Abseil.git lts_2025_08_14)
 list(APPEND DEPS absl::base absl::strings)
 
 fetch_dep(https://gitee.com/mirrors/googletest.git v1.17.0)
@@ -91,18 +88,18 @@ target_link_libraries(${TEST_TARGET} PRIVATE ${DEPS} ${TEST_DEPS})
 target_include_directories(${TEST_TARGET} PRIVATE ${GLOB_INCLUDE_DIRECTORY})
 include(GoogleTest)
 gtest_discover_tests(${TEST_TARGET}
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
 # 安装部分
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/target)
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 install(DIRECTORY config DESTINATION ${CMAKE_INSTALL_PREFIX})
-foreach (DEP ${DEPS})
+foreach (DEP ${SHARED_DEPS})
     install(CODE "
-        file(INSTALL \"$<TARGET_FILE:${DEP}>\"
-            DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib\"
-            TYPE FILE
-            FOLLOW_SYMLINK_CHAIN)
-    ")
+                file(INSTALL \"$<TARGET_FILE:${DEP}>\"
+                    DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib\"
+                    TYPE FILE
+                    FOLLOW_SYMLINK_CHAIN)
+            ")
 endforeach ()
