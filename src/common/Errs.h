@@ -3,8 +3,10 @@
 #include "nlohmann/json.hpp"
 #include <cstdint>
 #include <string>
+#include "common/Version.h"
 
 namespace rhino {
+RHINO_INLINE_NAMESPACE_BEGIN
 
 // error group, abstract for reduce code length
 struct EGrp {
@@ -52,4 +54,5 @@ struct Err {
 
     static Err QUEUE_FULL;
 };
+RHINO_INLINE_NAMESPACE_END
 } // namespace rhino

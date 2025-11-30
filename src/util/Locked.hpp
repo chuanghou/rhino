@@ -1,8 +1,10 @@
 #pragma once
 
 #include <mutex>
+#include "common/Version.h"
 
 namespace rhino {
+RHINO_INLINE_NAMESPACE_BEGIN
 template <typename T> class Locked {
 
     T obj;
@@ -19,4 +21,5 @@ template <typename T> class Locked {
         return f(obj);
     }
 };
+RHINO_INLINE_NAMESPACE_END
 } // namespace rhino

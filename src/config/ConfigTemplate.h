@@ -3,8 +3,10 @@
 
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
+#include "common/Version.h"
 
 namespace rhino {
+RHINO_INLINE_NAMESPACE_BEGIN
 
 class PostProcessor {
   public:
@@ -30,4 +32,5 @@ struct BoolCfg final : PostProcessor {
     std::string type = "bool";
 };
 
+RHINO_INLINE_NAMESPACE_END
 } // namespace rhino

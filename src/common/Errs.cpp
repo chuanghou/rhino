@@ -3,6 +3,7 @@
 #include "Errs.h"
 
 namespace rhino {
+RHINO_INLINE_NAMESPACE_BEGIN
 
 EGrp EGrp::INTERNAL = EGrp(-1, "INTERNAL");
 
@@ -14,4 +15,5 @@ Err Err::FORMAT_ERR = Err(1, "FORMAT_ERR", "format wrong, please check input inf
 
 Err Err::QUEUE_FULL = Err(2, "QUEUE_FULL", "queue is full, please try later");
 
+RHINO_INLINE_NAMESPACE_END
 } // namespace rhino

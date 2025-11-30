@@ -5,11 +5,13 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/optional/optional.hpp"
 #include <iostream>
+#include "common/Version.h"
 
 using namespace boost::posix_time;
 using namespace boost::gregorian;
 
 namespace rhino {
+RHINO_INLINE_NAMESPACE_BEGIN
 boost::optional<int64_t>
 local_time_to_unix_timestamp(const std::string &val,
                              const std::string &format = "%Y-%m-%d %H:%M:%S") {
@@ -45,4 +47,5 @@ std::string ptime_to_string(const ptime &pt,
     return ss.str();
 }
 
+RHINO_INLINE_NAMESPACE_END
 } // namespace rhino

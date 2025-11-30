@@ -3,6 +3,7 @@
 
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
+#include "common/Version.h"
 
 namespace nlohmann {
 
@@ -37,6 +38,7 @@ template <> struct adl_serializer<void *> {
 } // namespace nlohmann
 
 namespace rhino {
+RHINO_INLINE_NAMESPACE_BEGIN
 template <typename T> std::string toJson(const T &obj, bool pretty = false) {
     nlohmann::json j = obj;
     return pretty ? j.dump(4) : j.dump();
@@ -59,4 +61,5 @@ template <typename T> nlohmann::json toJsonTree(const T &obj) { return obj; }
 template <typename T> T fromJsonTree(const nlohmann::json &j) {
     return j.get<T>();
 }
+RHINO_INLINE_NAMESPACE_END
 } // namespace rhino

@@ -5,10 +5,12 @@
 #include <sstream>
 #include <string>
 #include <utility>
+#include "common/Version.h"
 
-#define SUCCESS_OF_NULLPTR com::Ret<void *>::successOfNullptr
+#define SUCCESS_OF_NULLPTR rhino::Ret<void *>::successOfNullptr
 
 namespace rhino {
+RHINO_INLINE_NAMESPACE_BEGIN
 
 template <class T> class Ret {
   public:
@@ -38,16 +40,17 @@ template <class T> class Ret {
     static Ret<void *> successOfNullptr;
 
     static Ret with(EGrp &eGrp, Err &err) {
-        return Ret(false, true, eGrp, err);
+        return Ret(false, err.sysErr, eGrp, err);
     }
 
     static Ret with(EGrp &eGrp, Err &err, const std::string &errMsg) {
         err.msg = errMsg;
-        return Ret(false, true, eGrp, err);
+        return Ret(false, err.sysErr, eGrp, err);
     }
 
     template <typename S> static Ret<T> FailureTransfer(Ret<S> source) {
-        return Ret(source.succeed(), source.sysErr, source.eGrp, source.err);
+        return Ret(source.success, source.sysErr, source.eGrp, source.err);
     }
 };
+RHINO_INLINE_NAMESPACE_END
 } // namespace rhino

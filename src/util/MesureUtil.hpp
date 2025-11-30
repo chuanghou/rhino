@@ -7,8 +7,10 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include "common/Version.h"
 
 namespace rhino {
+RHINO_INLINE_NAMESPACE_BEGIN
 // 获取TSC计算（原始计数）
 inline uint64_t rdtscp() noexcept {
 // x86/x64架构实现
@@ -221,4 +223,5 @@ inline uint64_t cvt_tsc_to_nano(const uint64_t uzTscTick,
 //   std::cout << "总耗时:" << duration_ns << " ns;平均耗时:" << duration_ns /
 //   1000000 << " ns\n";
 // }
-}; // namespace MaSesRdtscpTimer
+RHINO_INLINE_NAMESPACE_END
+} // namespace rhino
