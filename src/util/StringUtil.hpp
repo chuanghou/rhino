@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <cstring>
-#include <type_traits>
 #include "common/Ret.h"
 #include "common/Errs.h"
 #include "common/Version.h"
