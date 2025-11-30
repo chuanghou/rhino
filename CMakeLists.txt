@@ -48,6 +48,9 @@ endif ()
 list(APPEND DEPS SQLite::SQLite3)
 
 # FetchContent依赖
+# 指定 fetch 文件目录，所有通过 FetchContent 获取的依赖都会存储到这个目录
+# 注意：必须在 include(FetchDeps.cmake) 之前设置，因为 FetchDeps.cmake 内部会 include(FetchContent)
+set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch" CACHE PATH "Directory for FetchContent downloads")
 include(FetchDeps.cmake)
 
 fetch_dep(https://gitee.com/mirrors/capnproto.git v1.2.0)

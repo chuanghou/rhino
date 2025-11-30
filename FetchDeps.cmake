@@ -14,7 +14,10 @@
 
 
 # 3.11之后可以用，直接用Linux控制台可以，直接在windows用clion兼容有问题, vscode 因为是直接在linux服务器操作所以也没问题
-#set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
+# 如果外部没有设置 FETCHCONTENT_BASE_DIR，则使用默认值
+if(NOT DEFINED FETCHCONTENT_BASE_DIR)
+    set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/.cache/fetch")
+endif()
 
 # 包含 FetchContent 模块
 include(FetchContent)

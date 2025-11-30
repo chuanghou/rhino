@@ -86,5 +86,13 @@
     "cmake.configureOnEdit": false, // 禁止编辑 CMakeLists.txt 时自动重新配置
     "cmake.configureSettings": {
         "CMAKE_SUPPRESS_REGENERATION": "ON" // 可选：与 CMake 选项配合
-    }
+    },
+    // clangd 配置
+    "clangd.path": "/opt/clangd_21.1.0/bin/clangd",
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}",
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=never"
+    ]
 }

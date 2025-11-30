@@ -6,6 +6,7 @@
 #include <string>
 #include <utility>
 #include "common/Version.h"
+#include "common/Errs.h"
 
 #define SUCCESS_OF_NULLPTR rhino::Ret<void *>::successOfNullptr
 

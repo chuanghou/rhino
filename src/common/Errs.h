@@ -1,9 +1,10 @@
 #pragma once
 
-#include "nlohmann/json.hpp"
 #include <cstdint>
+#include <stdexcept>
 #include <string>
 #include "common/Version.h"
+#include "nlohmann/json.hpp"
 
 namespace rhino {
 RHINO_INLINE_NAMESPACE_BEGIN
